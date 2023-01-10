@@ -2,27 +2,88 @@
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
 $(function () {
-  
+  var allTextValues = {
+    9: "",
+    10: "",
+    11: "",
+    12: "",
+    13: "",
+    14: "",
+    15: "",
+    16: "",
+    17: "",
+  }
+  //uses jquery to get all the time block elements and puts them into an array
+  var timeBlock = $(".time-block")
+  //gets current hour and turns it into an int
+  var currentHour = parseInt(dayjs().format("H"))
+  console.log("current hour: " + currentHour)
 
-  var currentDay = dayjs().format("dddd, MMMM, Do")
-  console.log(currentDay)
-  // TODO: Add a listener for click events on the save button. This code should
-  // use the id in the containing time-block as a key to save the user input in
-  // local storage. HINT: What does `this` reference in the click listener
-  // function? How can DOM traversal be used to get the "hour-x" id of the
-  // time-block containing the button that was clicked? How might the id be
-  // useful when saving the description in local storage?
-  //
-  // TODO: Add code to apply the past, present, or future class to each time
-  // block by comparing the id to the current hour. HINTS: How can the id
-  // attribute of each time-block be used to conditionally add or remove the
-  // past, present, and future classes? How can Day.js be used to get the
-  // current hour in 24-hour time?
-  //
+  function applyStyles() {
+    //takes the ID of the time block, parses it into an number, then compares it to the current hour
+    for (var i = 0; i < timeBlock.length; i++) {
+      console.log(timeBlock[i].id)
+      if (timeBlock[i].id < parseInt(currentHour)) {
+        $(timeBlock[i]).addClass("past")
+      } else if (timeBlock[i].id == parseInt(currentHour)) {
+        $(timeBlock[i]).addClass("present")
+      } else {
+        $(timeBlock[i]).addClass("future")
+      }
+
+    }
+  }
+
+
   // TODO: Add code to get any user input that was saved in localStorage and set
   // the values of the corresponding textarea elements. HINT: How can the id
   // attribute of each time-block be used to do this?
-  //
-  // TODO: Add code to display the current date in the header of the page.
 
+  //gets the current date and displays it at the top of the page
+  function displayDate() {
+    var currentDay = dayjs().format('dddd, MMMM D, YYYY')
+    var currentDayEl = $("#currentDay")
+    currentDayEl.text(currentDay)
+  }
+
+  function renderSaved() {
+    allTextValues = localStorage.getItem("textValues")
+    allTextValues = JSON.parse(allTextValues)
+    console.log(allTextValues)
+    for (var i = 0; i < timeBlock.length; i++) {
+      var textToEnter = allTextValues[i + 9]
+
+      
+      $(timeBlock[i]).children().eq(1).val(textToEnter)
+    }
+  }
+
+
+
+  //event listener for all of the buttons
+  $('.saveBtn').on("click", function () {
+    //uses jquery dom traversal to get the value of the text field next to the button clicked.
+    var textFieldValue = $(this).parent().children().eq(1).val()
+    //uses jquery dom traversal to get the id of the section
+    var timeID = parseInt($(this).parent().attr("id"))
+
+    console.log($(this).parent())
+    console.log("ID: " + timeID + "\nValue: " + $(this).parent().children().eq(1).val())
+
+    //set value entered to that specific ID in the allTextValues variable
+    allTextValues[timeID] = textFieldValue
+    console.log(allTextValues[timeID])
+    console.log(allTextValues)
+
+    //save allTextValues to local storage
+    localStorage.setItem("textValues", JSON.stringify(allTextValues))
+  })
+
+  //establish textValues in local storage if it's empty
+  if (!localStorage.getItem("textValues")) {
+    localStorage.setItem("textValues", JSON.stringify(allTextValues))
+  }
+  applyStyles()
+  displayDate()
+  renderSaved()
 });
