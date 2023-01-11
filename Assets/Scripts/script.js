@@ -34,11 +34,6 @@ $(function () {
     }
   }
 
-
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the id
-  // attribute of each time-block be used to do this?
-
   //gets the current date and displays it at the top of the page
   function displayDate() {
     var currentDay = dayjs().format('dddd, MMMM D, YYYY')
@@ -46,19 +41,17 @@ $(function () {
     currentDayEl.text(currentDay)
   }
 
+  //renders all of the saved inputs when the page loads
   function renderSaved() {
     allTextValues = localStorage.getItem("textValues")
     allTextValues = JSON.parse(allTextValues)
-    console.log(allTextValues)
-    for (var i = 0; i < timeBlock.length; i++) {
-      var textToEnter = allTextValues[i + 9]
 
-      
+    for (var i = 0; i < timeBlock.length; i++) {
+      var textToEnter = allTextValues[i + 9] //+9 because the id for time blocks starts at 9, not 0
+      //puts the saved value into it's respective spot in the list of time blocks
       $(timeBlock[i]).children().eq(1).val(textToEnter)
     }
   }
-
-
 
   //event listener for all of the buttons
   $('.saveBtn').on("click", function () {
@@ -83,6 +76,8 @@ $(function () {
   if (!localStorage.getItem("textValues")) {
     localStorage.setItem("textValues", JSON.stringify(allTextValues))
   }
+
+  //initialize by running these three functions
   applyStyles()
   displayDate()
   renderSaved()
