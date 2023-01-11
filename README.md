@@ -13,7 +13,7 @@ You can view the published webpage [here](https://spawze.github.io/Work-Day-Sche
 
 Type your task into each slot on the page, and click the save button to save them to local storage. Times that are past will be gray, times that are now are red, and times in the future are green.
 
-![Image of the functioning webpage](assets/images/screenshot.png)
+![Image of the functioning webpage](Assets/images/screenshot.png)
 
 
 ## Credits
